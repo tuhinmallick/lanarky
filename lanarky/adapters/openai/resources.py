@@ -83,10 +83,10 @@ class ChatCompletionResource(OpenAIResource):
                     raise TypeError(f"Unexpected data type: {type(data)}")
                 if chunk.choices[0].delta.content is not None:
                     yield chunk.choices[0].delta.content
-        else:
-            if not isinstance(data, ChatCompletion):
-                raise TypeError(f"Unexpected data type: {type(data)}")
+        elif isinstance(data, ChatCompletion):
             yield data.choices[0].message.content
+        else:
+            raise TypeError(f"Unexpected data type: {type(data)}")
 
     async def __call__(self, messages: list[dict]) -> ChatCompletion:
         """Create a chat completion.

@@ -155,14 +155,13 @@ class TokenStreamingCallbackHandler(StreamingCallbackHandler):
         Final output is streamed only if LLM cache is enabled.
         """
         if self.llm_cache_used or not self.streaming:
-            if self.output_key in outputs:
-                message = self._construct_message(
-                    data=get_token_data(outputs[self.output_key], self.mode),
-                    event=Events.COMPLETION,
-                )
-                await self.send(message)
-            else:
+            if self.output_key not in outputs:
                 raise KeyError(f"missing outputs key: {self.output_key}")
+            message = self._construct_message(
+                data=get_token_data(outputs[self.output_key], self.mode),
+                event=Events.COMPLETION,
+            )
+            await self.send(message)
 
 
 class SourceDocumentsEventData(BaseModel):
@@ -347,14 +346,13 @@ class TokenWebSocketCallbackHandler(WebSocketCallbackHandler):
         Final output is streamed only if LLM cache is enabled.
         """
         if self.llm_cache_used or not self.streaming:
-            if self.output_key in outputs:
-                message = self._construct_message(
-                    data=get_token_data(outputs[self.output_key], self.mode),
-                    event=Events.COMPLETION,
-                )
-                await self.websocket.send_json(message)
-            else:
+            if self.output_key not in outputs:
                 raise KeyError(f"missing outputs key: {self.output_key}")
+            message = self._construct_message(
+                data=get_token_data(outputs[self.output_key], self.mode),
+                event=Events.COMPLETION,
+            )
+            await self.websocket.send_json(message)
 
 
 class SourceDocumentsWebSocketCallbackHandler(WebSocketCallbackHandler):

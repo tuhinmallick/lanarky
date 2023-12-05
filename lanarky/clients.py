@@ -38,8 +38,7 @@ class StreamingClient:
         """
         url = self.base_url + path
         with connect_sse(self.client, method, url, **kwargs) as event_source:
-            for sse in event_source.iter_sse():
-                yield sse
+            yield from event_source.iter_sse()
 
 
 class WebSocketClient:
