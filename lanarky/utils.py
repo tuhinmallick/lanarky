@@ -12,10 +12,7 @@ def model_dump(model: pydantic.BaseModel, **kwargs) -> dict[str, Any]:
     Args:
         model: A pydantic model.
     """
-    if PYDANTIC_V2:
-        return model.model_dump(**kwargs)
-    else:
-        return model.dict(**kwargs)
+    return model.model_dump(**kwargs) if PYDANTIC_V2 else model.dict(**kwargs)
 
 
 def model_dump_json(model: pydantic.BaseModel, **kwargs) -> str:
@@ -24,10 +21,7 @@ def model_dump_json(model: pydantic.BaseModel, **kwargs) -> str:
     Args:
         model: A pydantic model.
     """
-    if PYDANTIC_V2:
-        return model.model_dump_json(**kwargs)
-    else:
-        return model.json(**kwargs)
+    return model.model_dump_json(**kwargs) if PYDANTIC_V2 else model.json(**kwargs)
 
 
 def model_fields(model: pydantic.BaseModel) -> dict[str, FieldInfo]:
@@ -36,7 +30,4 @@ def model_fields(model: pydantic.BaseModel) -> dict[str, FieldInfo]:
     Args:
         model: A pydantic model.
     """
-    if PYDANTIC_V2:
-        return model.model_fields
-    else:
-        return model.__fields__
+    return model.model_fields if PYDANTIC_V2 else model.__fields__

@@ -116,16 +116,12 @@ def create_request_model(chain: Chain, prefix: str = "") -> BaseModel:
         chain: A LangChain instance.
         prefix: A prefix for the model name.
     """
-    request_fields = {}
-
-    for key in chain.input_keys:
-        # TODO: add support for other input key types
-        # based on demand
-        if key == "chat_history":
-            request_fields[key] = (list[tuple[str, str]], ...)
-        else:
-            request_fields[key] = (str, ...)
-
+    request_fields = {
+        key: (list[tuple[str, str]], ...)
+        if key == "chat_history"
+        else (str, ...)
+        for key in chain.input_keys
+    }
     prefix = prefix or chain.__class__.__name__
 
     return create_model(f"{prefix}Request", **request_fields)
@@ -138,16 +134,10 @@ def create_response_model(chain: Chain, prefix: str = None) -> BaseModel:
         chain: A LangChain instance.
         prefix: A prefix for the model name.
     """
-    response_fields = {}
-
-    for key in chain.output_keys:
-        # TODO: add support for other output key types
-        # based on demand
-        if key == "source_documents":
-            response_fields[key] = (list[Document], ...)
-        else:
-            response_fields[key] = (str, ...)
-
+    response_fields = {
+        key: (list[Document], ...) if key == "source_documents" else (str, ...)
+        for key in chain.output_keys
+    }
     prefix = prefix or chain.__class__.__name__
 
     return create_model(f"{prefix}Response", **response_fields)

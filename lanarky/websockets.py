@@ -50,15 +50,12 @@ class WebsocketSession:
 
     async def iter_text(self, websocket: WebSocket):
         while True:
-            data = await websocket.receive_text()
-            yield data
+            yield await websocket.receive_text()
 
     async def iter_bytes(self, websocket: WebSocket):
         while True:
-            data = await websocket.receive_bytes()
-            yield data
+            yield await websocket.receive_bytes()
 
     async def iter_json(self, websocket: WebSocket):
         while True:
-            data = await websocket.receive_json()
-            yield data
+            yield await websocket.receive_json()
